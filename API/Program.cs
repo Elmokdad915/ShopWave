@@ -15,6 +15,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
+//CORS Support
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", policy =>
+    {
+        policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");
+    });
+});
+
 
 builder.Services.AddDbContext<StoreContext>(options =>
 {
@@ -29,7 +38,7 @@ var app = builder.Build();
 
 
 
-
+app.UseCors("CorsPolicy");
 // Configure the HTTP request pipeline.
 app.UseMiddleware<ExceptionMiddleware>();
 
@@ -41,7 +50,7 @@ app.UseRouting();
 
 app.UseStaticFiles();
 
-app.UseCors("CorsPolicy");
+
 
 app.UseAuthorization();
 
